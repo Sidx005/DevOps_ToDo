@@ -27,7 +27,7 @@ jobs:
 
       - name: Verify backend
         run: |
-          python -m py_compile backend/app/main.py
+          python -m compileall backend/app/main.py
 
       - name: Setup Node
         uses: actions/setup-node@v4
