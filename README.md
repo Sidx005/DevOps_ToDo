@@ -338,7 +338,7 @@ kubectl api-resources
 
 ---
 
-# 1. <img src="https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png" width="50" /> Kubernetes Overview
+# 1. <div style="display:'flex';justify-content:'start'; align-items:'center'"> <img src="https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png" width="50" /> Kubernetes Overview </div>
 
 **Kubernetes (K8s)** is a container orchestration platform that automates the deployment, scaling, networking, storage, and management of containerized applications. Instead of manually running Docker containers on servers, Kubernetes manages the complete lifecycle of applications by distributing containers across cluster nodes, monitoring their health, restarting failed containers, providing networking, and managing persistent storage.
 
