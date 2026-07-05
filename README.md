@@ -88,6 +88,7 @@ FullStackToDo
 <hr/>
 
 ### Docker commands
+
 <b>Build Image</b>
 ```code
 docker build -t todo-backend ./backend
@@ -123,6 +124,7 @@ docker exec -it container-id bash
 <hr/>
 
 ### Docker Hub Commands
+
 <b>Login </b>
 ```code
 docker login
