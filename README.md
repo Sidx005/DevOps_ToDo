@@ -48,3 +48,26 @@ THe UI is pretty minimalistic with a feel-good macbook theme
   
 </ol>
 
+
+## Project Structure
+
+``` code
+FullStackToDo
+
+├── backend
+│
+├── frontend
+│
+├── k8s
+│   ├── backend-deployment.yaml
+│   ├── backend-service.yaml
+│   ├── frontend-deployment.yaml
+│   ├── frontend-service.yaml
+│   └── pvc.yaml
+│
+├── .github
+│   └── workflows
+│
+└── README.md
+
+```
