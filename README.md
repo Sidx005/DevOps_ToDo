@@ -1,5 +1,4 @@
 # Full-Stack ToDo Application With Kubernetes Deployment
-<br/>
 <p>
 This was a learning todo application built with more focus on the devops side,where I used kubernetes
 for deploying the application locally. With this application, you can add your tasks, update tasks as completed or not completed, delete the tsk
