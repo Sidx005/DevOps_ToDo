@@ -55,7 +55,8 @@ THe UI is pretty minimalistic with a feel-good macbook theme
 FullStackToDo
 
 ├── backend
-│
+│   |-----app
+|
 ├── frontend
 │
 ├── k8s
