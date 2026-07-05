@@ -331,3 +331,680 @@ kubectl explain pvc
 kubectl api-resources
 ```
 
+
+
+### Kubernetes PArt (k8s)
+# Kubernetes Deployment Documentation
+
+---
+
+# 1. Kubernetes Overview
+
+**Kubernetes (K8s)** is a container orchestration platform that automates the deployment, scaling, networking, storage, and management of containerized applications. Instead of manually running Docker containers on servers, Kubernetes manages the complete lifecycle of applications by distributing containers across cluster nodes, monitoring their health, restarting failed containers, providing networking, and managing persistent storage.
+
+In this project, Kubernetes was used through **Minikube** to deploy a full-stack Todo application consisting of:
+
+* React frontend
+* FastAPI backend
+* SQLite database
+* Persistent storage using Persistent Volume Claims
+
+---
+
+# 2. Kubernetes Terminologies
+
+| Term                          | Definition                                                 |
+| ----------------------------- | ---------------------------------------------------------- |
+| Cluster                       | A collection of machines running Kubernetes                |
+| Node                          | A machine (physical or virtual) inside a cluster           |
+| Pod                           | Smallest deployable unit containing one or more containers |
+| Deployment                    | Manages pod creation, updates, and self-healing            |
+| ReplicaSet                    | Ensures the desired number of pod replicas exist           |
+| Service                       | Provides stable networking to pods                         |
+| ClusterIP                     | Internal service accessible only inside cluster            |
+| NodePort                      | Exposes service externally through node IP and port        |
+| Persistent Volume (PV)        | Actual storage resource                                    |
+| Persistent Volume Claim (PVC) | Request for storage                                        |
+| Namespace                     | Logical isolation within cluster                           |
+| Labels                        | Key-value tags attached to objects                         |
+| Selectors                     | Used to identify resources using labels                    |
+| Volume                        | Storage mounted inside container                           |
+| ConfigMap                     | Stores non-sensitive configuration                         |
+| Secret                        | Stores sensitive data                                      |
+
+---
+
+# 3. Backend Deployment
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: todo-backend
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: todo-backend
+
+  template:
+    metadata:
+      labels:
+        app: todo-backend
+
+    spec:
+      containers:
+        - name: backend
+          image: sidd200/todo-backend:latest
+
+          ports:
+            - containerPort: 8000
+
+          volumeMounts:
+            - name: todo-storage
+              mountPath: /data
+
+      volumes:
+        - name: todo-storage
+          persistentVolumeClaim:
+            claimName: todo-pvc
+```
+
+## Explanation
+
+### apiVersion
+
+Specifies which Kubernetes API version to use.
+
+```text
+apps/v1
+```
+
+---
+
+### kind
+
+Defines the type of Kubernetes object.
+
+```text
+Deployment
+```
+
+---
+
+### metadata
+
+Contains information describing the resource.
+
+```yaml
+metadata:
+  name: todo-backend
+```
+
+---
+
+### replicas
+
+Specifies how many pod instances should exist.
+
+```yaml
+replicas: 1
+```
+
+---
+
+### selector
+
+Used by Deployment to identify pods it controls.
+
+```yaml
+selector:
+  matchLabels:
+    app: todo-backend
+```
+
+---
+
+### template
+
+Defines how new pods should be created.
+
+---
+
+### labels
+
+Assigns labels to pods.
+
+```yaml
+labels:
+  app: todo-backend
+```
+
+---
+
+### containers
+
+List of containers to run inside the pod.
+
+---
+
+### image
+
+Docker image to pull.
+
+```yaml
+image:
+  sidd200/todo-backend:latest
+```
+
+---
+
+### containerPort
+
+Application port inside container.
+
+```yaml
+containerPort: 8000
+```
+
+---
+
+### volumeMounts
+
+Mounts storage into container filesystem.
+
+```yaml
+mountPath: /data
+```
+
+---
+
+### volumes
+
+Connects pod storage to PVC.
+
+```yaml
+persistentVolumeClaim:
+  claimName: todo-pvc
+```
+
+---
+
+# 4. Backend Service
+
+```yaml
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: todo-backend-service
+
+spec:
+  selector:
+    app: todo-backend
+
+  ports:
+    - port: 8000
+      targetPort: 8000
+
+  type: NodePort
+```
+
+## Explanation
+
+### Service
+
+Provides stable networking for pods.
+
+---
+
+### selector
+
+Selects pods matching:
+
+```text
+app=todo-backend
+```
+
+---
+
+### port
+
+Internal cluster service port.
+
+```yaml
+port: 8000
+```
+
+---
+
+### targetPort
+
+Container port.
+
+```yaml
+targetPort: 8000
+```
+
+---
+
+### NodePort
+
+Creates an external port.
+
+Example:
+
+```text
+31445
+```
+
+allowing:
+
+```text
+Browser
+    ↓
+192.168.49.2:31445
+    ↓
+Backend Pod
+```
+
+---
+
+# 5. Frontend Deployment
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: todo-frontend
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: todo-frontend
+
+  template:
+    metadata:
+      labels:
+        app: todo-frontend
+
+    spec:
+      containers:
+        - name: frontend
+          image: sidd200/todo-frontend:latest
+
+          ports:
+            - containerPort: 80
+```
+
+## Explanation
+
+Same concepts as backend deployment.
+
+Only differences:
+
+```text
+Image:
+    todo-frontend
+
+Port:
+    80 (Nginx)
+```
+
+---
+
+# 6. Frontend Service
+
+```yaml
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: todo-frontend-service
+
+spec:
+  selector:
+    app: todo-frontend
+
+  ports:
+    - port: 80
+      targetPort: 80
+
+  type: NodePort
+```
+
+## Explanation
+
+Creates an external endpoint:
+
+```text
+192.168.49.2:30080
+```
+
+which forwards requests to frontend pods.
+
+---
+
+# 7. Persistent Volume Claim
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: todo-pvc
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+
+  resources:
+    requests:
+      storage: 1Gi
+```
+
+## Explanation
+
+### PersistentVolumeClaim
+
+Requests persistent storage.
+
+---
+
+### accessModes
+
+```yaml
+ReadWriteOnce
+```
+
+Means:
+
+```text
+One node can mount it
+for read/write.
+```
+
+---
+
+### storage
+
+Requested storage size.
+
+```yaml
+1Gi
+```
+
+---
+
+# 8. Kubernetes Networking and IP Configuration
+
+---
+
+## Pod IP
+
+Every pod receives its own IP.
+
+Example:
+
+```text
+Backend Pod
+10.244.0.5
+
+Frontend Pod
+10.244.0.6
+```
+
+However pod IPs are temporary.
+
+---
+
+## Service IP
+
+Services receive stable IPs.
+
+Example:
+
+```text
+todo-backend-service
+
+10.103.17.45
+```
+
+Pods can restart:
+
+```text
+10.244.0.5
+       ↓
+10.244.0.8
+```
+
+but service IP remains:
+
+```text
+10.103.17.45
+```
+
+---
+
+## Cluster DNS
+
+Kubernetes automatically creates DNS entries.
+
+Example:
+
+```text
+todo-backend-service
+```
+
+resolves to:
+
+```text
+10.103.17.45
+```
+
+Thus frontend can call:
+
+```javascript
+http://todo-backend-service:8000/todos
+```
+
+instead of using pod IPs.
+
+---
+
+## NodePort
+
+NodePort exposes services externally.
+
+Example:
+
+```text
+Browser
+     ↓
+192.168.49.2:31445
+     ↓
+NodePort Service
+     ↓
+Backend Pod
+```
+
+---
+
+# 9. Application Flow
+
+```text
+Browser
+   |
+   |
+30080
+   |
+Frontend Service
+   |
+Frontend Pod
+   |
+31445
+   |
+Backend Service
+   |
+Backend Pod
+   |
+SQLite
+   |
+Persistent Volume
+```
+
+---
+
+# 10. Failure Scenario
+
+Suppose backend pod crashes.
+
+```text
+Backend Pod
+      X
+```
+
+Deployment detects:
+
+```text
+Desired replicas = 1
+Actual replicas = 0
+```
+
+Kubernetes creates:
+
+```text
+New Backend Pod
+```
+
+automatically.
+
+---
+
+# 11. Pod Deletion Scenario
+
+```bash
+kubectl delete pod -l app=todo-backend
+```
+
+Kubernetes:
+
+```text
+Deletes Pod
+      ↓
+Deployment notices
+      ↓
+Creates new Pod
+      ↓
+Attaches same PVC
+      ↓
+Database survives
+```
+
+---
+
+# 12. Image Update Scenario
+
+Suppose frontend changes.
+
+### Step 1
+
+Build image:
+
+```bash
+docker build -t todo-frontend ./frontend
+```
+
+---
+
+### Step 2
+
+Tag image:
+
+```bash
+docker tag todo-frontend sidd200/todo-frontend:v2
+```
+
+---
+
+### Step 3
+
+Push image:
+
+```bash
+docker push sidd200/todo-frontend:v2
+```
+
+---
+
+### Step 4
+
+Update deployment:
+
+```yaml
+image:
+  sidd200/todo-frontend:v2
+```
+
+---
+
+### Step 5
+
+Apply:
+
+```bash
+kubectl apply -f frontend-deployment.yaml
+```
+
+---
+
+### Step 6
+
+Kubernetes performs rolling update:
+
+```text
+Old Pod Running
+
+Create New Pod
+       ↓
+Verify Healthy
+       ↓
+Delete Old Pod
+```
+
+---
+
+# 13. Complete Lifecycle
+
+```text
+Write Code
+     ↓
+Build Docker Image
+     ↓
+Push To DockerHub
+     ↓
+Apply Kubernetes YAML
+     ↓
+Deployment Creates Pods
+     ↓
+Service Creates Networking
+     ↓
+PVC Creates Storage
+     ↓
+Application Runs
+     ↓
+Pod Failure
+     ↓
+Automatic Recovery
+     ↓
+New Image Push
+     ↓
+Rolling Update
+```
+
