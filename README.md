@@ -85,6 +85,7 @@ FullStackToDo
   pip install -r requirements.txt
  ```
 
+<hr/>
 
 ### Docker commands
 <b>Build Image</b>
@@ -119,7 +120,7 @@ docker logs container-id
 docker exec -it container-id bash
 
 ```
-
+<hr/>
 
 ### Docker Hub Commands
 <b>Login </b>
