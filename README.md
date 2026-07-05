@@ -70,9 +70,83 @@ FullStackToDo
 
 
 ## Commands
-<div>
+
+### Environment Commands
 <b>1. Python Virtual Environment </b>
 ```code
   python -m venv venv
  ```
-</div>
+<b>2. Activate Virtual Environment </b>
+```code
+  source venv/bin/activate
+ ```
+<b>3. Install requiremnts </b>
+```code
+  pip install -r requirements.txt
+ ```
+
+
+### Docker commands
+<b>Build Image</b>
+```code
+docker build -t todo-backend ./backend
+
+docker build -t todo-frontend ./frontend
+
+```
+<b>List Image</b>
+```code
+docker images
+
+```
+<b>Remove container</b>
+```code
+docker rm container-id
+
+```
+<b>Remove Image</b>
+```code
+docker rmi image-id
+
+```
+<b>View Logs</b>
+```code
+docker logs container-id
+
+```
+<b>Enter container</b>
+```code
+docker exec -it container-id bash
+
+```
+
+
+### Docker Hub Commands
+<b>Login </b>
+```code
+docker login
+```
+
+<b>Tag image</b>
+```code
+docker tag todo-backend sidd200/todo-backend:latest
+
+docker tag todo-frontend sidd200/todo-frontend:latest
+```
+
+<b>Push image </b>
+```code
+docker push sidd200/todo-backend:latest
+
+docker push sidd200/todo-frontend:latest
+```
+
+<b>Pull image </b>
+```code
+docker pull sidd200/todo-backend:latest
+```
+
+<b> Logout </b>
+```code
+docker logout
+```
