@@ -33,11 +33,6 @@ THe UI is pretty minimalistic with a feel-good macbook theme
   </li>
 
   <li>
-    <b> Kubernetes Persistent Volume Support </b>
-      Data survives pod restart,deployment restart
-    
-  </li>
-  <li>
     <b>Containerization:</b>
       Frontend and  Backend are both separately containerised , making them isolated, consistent in depoyment and environment.
   </li>
@@ -71,3 +66,13 @@ FullStackToDo
 └── README.md
 
 ```
+
+
+
+## Commands
+<div>
+<b>1. Python Virtual Environment </b>
+```code
+  python -m venv venv
+ ```
+</div>
