@@ -5,6 +5,8 @@ for deploying the application locally. With this application, you can add your t
 once completed and also you could search the tasks.
 THe UI is pretty minimalistic with a feel-good macbook theme
 
+<img style="border-radius:'12px'" width="1702" height="802" alt="Screenshot From 2026-07-05 22-13-22" src="https://github.com/user-attachments/assets/709e3500-8d62-4f32-8d8b-db2a861a1107" />
+
 ## Features
 <ol>
   <li>
@@ -44,3 +46,4 @@ THe UI is pretty minimalistic with a feel-good macbook theme
   </li>
   
 </ol>
+
