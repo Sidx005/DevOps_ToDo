@@ -7,8 +7,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-const API = "http://localhost:8000";
-
+const API = "http://192.168.49.2:31445";
 export default function ToDo() {
   const [todos, setTodos] = useState([]);
   const [task, setTask] = useState("");
@@ -123,7 +122,7 @@ export default function ToDo() {
     );
 
   return (
-    <div className="h-screen bg-[url('wallpaper.jpg')] bg-no-repeat bg-cover flex items-center justify-center p-8">
+    <div className="h-screen bg-[url('/wallpaper.jpg')] bg-no-repeat bg-cover flex items-center justify-center p-8">
 
       <div className="w-[1000px] h-[650px] rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl bg-white/60 border border-white/50">
 
@@ -140,7 +139,7 @@ export default function ToDo() {
           <div className="w-72 bg-white/30 border-r p-6">
 
             <h1 className="text-2xl font-semibold mb-8">
-              Reminders
+              Tasks
             </h1>
 
             <div className="space-y-3">
@@ -189,7 +188,7 @@ export default function ToDo() {
                     e.target.value
                   )
                 }
-                placeholder="Search reminders..."
+                placeholder="Search tasks..."
                 className="bg-transparent outline-none flex-1"
               />
             </div>
